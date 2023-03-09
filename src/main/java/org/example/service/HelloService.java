@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -26,12 +26,19 @@ public class HelloService {
     @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
 
-    public List<Map<String, Object>> test111() {
+    @Transactional
+    public List<Map<String, Object>> test111() throws Exception {
+
         String sql = """
-                select * from DEPT
+                select * from DEPT where DEPTNO=1
                 """;
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         //List<Map<String, Object>> byNamedQuery = (List<Map<String, Object>>) hibernateTemplate.findByNamedQuery(sql);
+        //修改数据
+        String sql1 = """
+                UPDATE DEPT SET LOC='123111' where DEPTNO = 1
+                """;
+        jdbcTemplate.execute(sql1);
 
         return maps;
     }

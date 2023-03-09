@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.service.HelloService;
-import org.example.utils.SplitListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.CollectionUtils;
@@ -15,15 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @RestController("/hello")
 @Slf4j
-public class Hello {
+public class HelloController {
 
     @Autowired
     private HelloService helloService;
@@ -31,17 +29,18 @@ public class Hello {
     private ThreadPoolTaskExecutor taskExecutor;
 
     @RequestMapping("test1")
-    public String test1(HttpServletRequest request) {
+    public List<Map<String, Object>> test1(HttpServletRequest request) throws Exception {
         log.info(request.getRequestURL().toString());
         Teacher person = new Teacher();
         person.run();
         person.setName("jack");
         Gson gson = new Gson();
+        List<Map<String, Object>> maps = helloService.test111();
 
 
         log.info(String.format("请求结束: %s", System.currentTimeMillis()));
-        String s = helloService.restTest();
-        return s;
+        //String s = helloService.restTest();
+        return maps;
     }
 
     @RequestMapping("test2")
@@ -55,31 +54,6 @@ public class Hello {
     @RequestMapping("test3")
     public String test3(@RequestParam HashMap<String, Objects> argMap) {
         ArrayList<Future<String>> list = new ArrayList<>();
-        for (int i = 0; i < 18000; i++) {
-            //list.add(i + "");
-            int finalI = i;
-            Future<String> submit = taskExecutor.submit(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.println(Thread.currentThread().getName() + finalI);
-                    return finalI + "";
-                }
-            });
-
-            list.add(submit);
-        }
-
-
-        System.out.println(list.size());
-        int maximumPoolSize = taskExecutor.getThreadPoolExecutor().getMaximumPoolSize();
-        System.out.println("maximumPoolSize: " + maximumPoolSize);
-        BlockingQueue<Runnable> queue = taskExecutor.getThreadPoolExecutor().getQueue();
-        System.out.println("queue size: "+queue.size());
 
         /*List<List<String>> split = SplitListUtils.split(list, 100);
         List<Future<String>> result = new ArrayList<>();
@@ -108,7 +82,7 @@ public class Hello {
                 throw new RuntimeException(e);
             }
         }*/
-        return "arg: "+list.size();
+        return "arg: " + list.size();
     }
 
     static class ExeTask implements Callable<String> {
