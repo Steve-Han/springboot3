@@ -1,10 +1,12 @@
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.io.IOException;
+import java.util.function.BiFunction;
 
 //@SpringBootTest(classes = {MyConfiguration.class, HelloService.class})
 public class MyTest {
@@ -16,18 +18,27 @@ public class MyTest {
 
     @Test
     public void test01() throws Exception {
-        List<Double> collect = Stream.generate(Math::random).limit(10).toList();
 
-        System.out.println(collect);
     }
 
-    public List<String> getDatesBetween(String fromDate, String toDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate startDate = LocalDate.parse(fromDate, formatter);
-        LocalDate endDate = LocalDate.parse(toDate, formatter);
-        return startDate.datesUntil(endDate.plusDays(1))
-                .map(LocalDate::toString)
-                .collect(Collectors.toList());
+    public void funTest(Integer i, BiFunction<BiFunctionTest, Integer, Boolean> function) {
+        BiFunctionTest biTest = new BiFunctionTest();
+        Boolean apply = function.apply(biTest, i);
+        System.out.println(apply);
     }
 
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+    OkHttpClient client = new OkHttpClient();
+
+    String post(String url, String json) throws IOException {
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
+    }
 }

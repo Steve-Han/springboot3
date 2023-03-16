@@ -20,15 +20,4 @@ public class MyConfiguration {
         this.port = port;
     }
 
-    @Bean
-    public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
-        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(5);
-        taskExecutor.setMaxPoolSize(10);
-        taskExecutor.setQueueCapacity(20);
-
-        System.out.println("create ThreadPoolTaskExecutor...");
-
-        return taskExecutor;
-    }
 }

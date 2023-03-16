@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 @RestController("/hello")
 @Slf4j
@@ -48,63 +50,27 @@ public class HelloController {
         if (argMap.size() == 0) {
             return null;
         }
+
+        Function<Object, Object> function = new Function<>() {
+            @Override
+            public Object apply(Object o) {
+                return o.toString();
+            }
+        };
+
         return "arg: " + argMap;
     }
 
-    @RequestMapping("test3")
-    public String test3(@RequestParam HashMap<String, Objects> argMap) {
-        ArrayList<Future<String>> list = new ArrayList<>();
-
-        /*List<List<String>> split = SplitListUtils.split(list, 100);
-        List<Future<String>> result = new ArrayList<>();
-        for (List<String> subList : split) {
-            Future<String> submit = taskExecutor.submit(new ExeTask(subList));
-            result.add(submit);
-        }
-
-        StringBuilder res = new StringBuilder();
-        for (Future<String> future : result) {
-            try {
-                String s = future.get();
-                res.append(s);
-                taskExecutor.submit(() -> {
-                    char[] chars = s.toCharArray();
-                    for (char aChar : chars) {
-                        //System.out.println(Thread.currentThread().getName() + ": " + aChar);
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }*/
-        return "arg: " + list.size();
+    public static void from(Function<Object, Object> function) {
+        Object apply = function.apply(new ArrayList<String>());
+        System.out.println("apply+" + apply.toString());
     }
 
-    static class ExeTask implements Callable<String> {
-        private List<String> list;
+    @RequestMapping("test3")
+    public String test3(@RequestParam HashMap<String, Objects> argMap) throws IOException {
+        ArrayList<Future<String>> list = new ArrayList<>();
 
-        ExeTask(List<String> list) {
-            this.list = list;
-        }
-
-        @Override
-        public String call() throws Exception {
-            int cnt = 0;
-            long tmpTime = 0;
-            String msg = null;
-            List<String> results = new ArrayList<String>();
-            if (!CollectionUtils.isEmpty(list)) {
-                Thread.sleep(1000);
-                cnt = list.size();
-                //System.out.println("ExeTask~~~" + Thread.currentThread().getName());
-            }
-            return cnt + "";
-        }
+        return "";
     }
 
 }
