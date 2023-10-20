@@ -3,7 +3,9 @@ package org.example.controller;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.example.entity.Student;
 import org.example.service.HelloService;
+import org.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.CollectionUtils;
@@ -29,20 +31,18 @@ public class HelloController {
     private HelloService helloService;
     @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
+    @Autowired
+    private StudentService studentService;
 
     @RequestMapping("test1")
-    public List<Map<String, Object>> test1(HttpServletRequest request) throws Exception {
+    public List<Student> test1(HttpServletRequest request) throws Exception {
         log.info(request.getRequestURL().toString());
-        Teacher person = new Teacher();
-        person.run();
-        person.setName("jack");
-        Gson gson = new Gson();
-        List<Map<String, Object>> maps = helloService.test111();
+        List<Student> all = studentService.findAll();
 
 
         log.info(String.format("请求结束: %s", System.currentTimeMillis()));
         //String s = helloService.restTest();
-        return maps;
+        return all;
     }
 
     @RequestMapping("test2")

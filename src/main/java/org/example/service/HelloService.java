@@ -67,4 +67,10 @@ public class HelloService {
         return body;
     }
 
+    public int throwErr () {
+        int i = 1/0;
+
+        return i;
+    }
+
 }
