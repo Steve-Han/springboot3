@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.example.entity.Student;
 import org.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +25,12 @@ public class StudentController {
 
     @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
-    @Autowired
-    private StudentService studentService;
+
 
     @RequestMapping("getAll")
     public List<Student> test1(HttpServletRequest request) throws Exception {
         log.info(request.getRequestURL().toString());
-        List<Student> all = studentService.findAll();
+        List<Student> all = null;
 
 
         log.info(String.format("请求结束: %s", System.currentTimeMillis()));
@@ -49,11 +49,9 @@ public class StudentController {
         String birth = argMap.get("birth");
         Date birthdate = DateUtils.parseDate(birth, "yyyy-MM-dd");
 
-        Student save = studentService.save(name, age, birthdate);
 
-        System.out.println(save.toString());
 
-        return "arg: " + save;
+        return "arg: ";
     }
 
     public static void from(Function<Object, Object> function) {
@@ -70,7 +68,7 @@ public class StudentController {
         String name = argMap.get("name");
         Integer id = Integer.valueOf(argMap.get("id"));
 
-        Integer modified = studentService.modifyNameById(name, id);
+        Integer modified = 1;
 
         System.out.println(modified);
 
@@ -78,12 +76,10 @@ public class StudentController {
     }
 
     @RequestMapping("findById/{id}")
-    public Student findById(@PathVariable("id") Integer id) {
+    public Integer findById(@PathVariable("id") Integer id) {
 
-        Student byId = studentService.findById(id);
+        System.out.println(id);
 
-        System.out.println(byId);
-
-        return byId;
+        return id;
     }
 }

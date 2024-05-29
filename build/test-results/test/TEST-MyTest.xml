@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="MyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-03-16T07:07:00" hostname="5I5J-HANYU" time="0.032">
+<testsuite name="MyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-02-26T06:46:07" hostname="5I5J-HANYU" time="0.017">
   <properties/>
-  <testcase name="test01()" classname="MyTest" time="0.032"/>
-  <system-out><![CDATA[1
+  <testcase name="test01()" classname="MyTest" time="0.017"/>
+  <system-out><![CDATA[123
+abc
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

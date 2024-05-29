@@ -23,7 +23,7 @@ public class MyFilter implements Filter {
 
         if (response instanceof HttpServletResponse httpServletResponse) {
             int status = httpServletResponse.getStatus();
-            System.out.println("status: " + status);
+            System.out.println("MyFilter1 status: " + status);
         }
 
         chain.doFilter(request, response);
